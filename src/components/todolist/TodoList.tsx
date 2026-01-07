@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Todo, TodoStatus, TodoPriority } from '../../types/todo';
 import { DndContext, closestCenter, DragOverlay } from "@dnd-kit/core";
 import { SortableContext, arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -7,7 +7,23 @@ import { TodoForm } from "./TodoForm";
 import { TodoItem } from "./TodoItem";
 
 const TodoList = () => {
-    const [tasks, setTasks] = useState<Todo[]>([]);
+    // Initialize tasks from localStorage
+    const [tasks, setTasks] = useState<Todo[]>(() => {
+        try {
+            const saved = localStorage.getItem('todo-storage');
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            console.error('Failed to load tasks from local storage', e);
+            return [];
+        }
+    });
+    
+    
+    // Save tasks to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('todo-storage', JSON.stringify(tasks));
+    }, [tasks]);
+
     const [activeId, setActiveId] = useState<number | null>(null);
 
     const handleAddTask = (taskText: string) => {
