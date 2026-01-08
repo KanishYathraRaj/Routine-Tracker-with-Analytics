@@ -9,11 +9,4 @@ export interface Todo {
     priority: TodoPriority;
     startTime: number | null; // timestamp when task was set to in-progress
     elapsedTime: number; // total elapsed time in milliseconds
-    completedAt?: number | null; // timestamp when task was marked done
-}
-
-export interface DailyStats {
-    date: string;
-    total: number;
-    completed: number;
 }
